@@ -31,7 +31,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
             m.moveCursorUp()
         case "down", "j":
             m.moveCursorDown()
-        case "enter":
+        case "enter", "a":
             m.toggleExpand()
             m.toggleSelect()
         }
