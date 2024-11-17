@@ -6,10 +6,8 @@ import (
     "github.com/atotto/clipboard"
 )
 
-// moveCursorUp moves the cursor up in the tree view.
-// If the cursor is at the first child of its parent, it moves the cursor to the parent node.
-// Otherwise, it moves the cursor to the previous sibling node.
-func (m *model) moveCursorUp() {
+// moveBrotherCursorUp moves the cursor to the previous sibling node.
+func (m *model) moveBrotherCursorUp() {
     parent := m.cursor.parent
     if parent == nil {
         return
@@ -26,6 +24,78 @@ func (m *model) moveCursorUp() {
         m.cursor = parent.children[index-1]
     } else {
         m.cursor = parent
+    }
+}
+
+// moveBrotherCursorDown moves the cursor to the next sibling node.
+// If the cursor is at the last sibling, it moves to the parent's next sibling node.
+func (m *model) moveBrotherCursorDown() {
+    // 親ノードを取得
+    parent := m.cursor.parent
+    if parent == nil {
+        return
+    }
+
+    // 現在のカーソルのインデックスを取得
+    index := -1
+    for i, child := range parent.children {
+        if child == m.cursor {
+            index = i
+            break
+        }
+    }
+
+    // 次の兄弟ノードに移動
+    if index < len(parent.children)-1 {
+        m.cursor = parent.children[index+1]
+        return
+    }
+
+    // 次の親ノードの兄弟ノードに移動する
+    for parent != nil {
+        grandParent := parent.parent
+        if grandParent == nil {
+            return
+        }
+
+        index = -1
+        for i, child := range grandParent.children {
+            if child == parent {
+                index = i
+                break
+            }
+        }
+
+        // 親ノードの次の兄弟ノードがある場合に移動
+        if index < len(grandParent.children)-1 {
+            m.cursor = grandParent.children[index+1]
+            return
+        }
+
+        // さらに上の親ノードに移動して探索を続ける
+        parent = grandParent
+    }
+}
+
+// moveCursorDown moves the cursor down in the tree view.
+// If the cursor is at the last child of its parent, it moves the cursor to the parent's next sibling node.
+// Otherwise, it moves the cursor to the next sibling node if available.
+func (m *model) moveCursorUp() {
+    // 表示されているノード一覧を取得
+    visibleNodes := m.getVisibleNodes()
+
+    // 現在のカーソルのインデックスを取得
+    index := -1
+    for i, node := range visibleNodes {
+        if node == m.cursor {
+            index = i
+            break
+        }
+    }
+
+    // インデックスが0より大きい場合、上に移動
+    if index > 0 {
+        m.cursor = visibleNodes[index-1]
     }
 }
 

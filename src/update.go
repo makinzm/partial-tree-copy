@@ -23,6 +23,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
         case "ctrl+c", "w":
             m.copySelection()
             return m, tea.Quit
+        case "K":
+            m.moveBrotherCursorUp()
+        case "J":
+            m.moveBrotherCursorDown()
         case "up", "k":
             m.moveCursorUp()
         case "down", "j":

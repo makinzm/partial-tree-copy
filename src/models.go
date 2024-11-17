@@ -45,3 +45,20 @@ func buildTree(node *fileNode) {
     }
 }
 
+// getVisibleNodes returns a list of nodes that are currently visible based on the expanded state.
+func (m *model) getVisibleNodes() []*fileNode {
+    var nodes []*fileNode
+    var traverse func(node *fileNode)
+
+    traverse = func(node *fileNode) {
+        nodes = append(nodes, node)
+        if node.isDir && node.expanded {
+            for _, child := range node.children {
+                traverse(child)
+            }
+        }
+    }
+
+    traverse(m.root)
+    return nodes
+}
