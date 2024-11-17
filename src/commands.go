@@ -33,23 +33,54 @@ func (m *model) moveCursorUp() {
 // If the current node is a directory and expanded, it moves the cursor to its first child.
 // Otherwise, it moves to the next sibling node if available.
 func (m *model) moveCursorDown() {
+    // 展開されているディレクトリの場合、最初の子ノードに移動
     if m.cursor.isDir && m.cursor.expanded && len(m.cursor.children) > 0 {
         m.cursor = m.cursor.children[0]
-    } else {
-        parent := m.cursor.parent
-        if parent == nil {
+        return
+    }
+
+    // 親ノードを取得
+    parent := m.cursor.parent
+    if parent == nil {
+        return
+    }
+
+    // 現在のカーソルのインデックスを取得
+    index := -1
+    for i, child := range parent.children {
+        if child == m.cursor {
+            index = i
+            break
+        }
+    }
+
+    // 次の兄弟ノードに移動
+    if index < len(parent.children)-1 {
+        m.cursor = parent.children[index+1]
+        return
+    }
+
+    // 次の親ノードに移動する処理を追加
+    for parent != nil {
+        grandParent := parent.parent
+        if grandParent == nil {
             return
         }
-        index := -1
-        for i, child := range parent.children {
-            if child == m.cursor {
+
+        index = -1
+        for i, child := range grandParent.children {
+            if child == parent {
                 index = i
                 break
             }
         }
-        if index < len(parent.children)-1 {
-            m.cursor = parent.children[index+1]
+
+        if index < len(grandParent.children)-1 {
+            m.cursor = grandParent.children[index+1]
+            return
         }
+
+        parent = grandParent
     }
 }
 
