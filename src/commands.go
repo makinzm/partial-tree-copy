@@ -3,6 +3,8 @@ package main
 import (
     "os"
     "strings"
+    "path/filepath"
+
     "github.com/atotto/clipboard"
 )
 
@@ -184,16 +186,29 @@ func (m *model) toggleSelect() {
 // It reads the content of each selected file, prepends the filename as a header, and concatenates them.
 // The resulting string is written to the clipboard using the clipboard package.
 func (m *model) copySelection() {
+    currentDir, err := os.Getwd()
+    if err != nil {
+        return
+    }
+
     var builder strings.Builder
     for _, node := range m.selection {
+        // 現在のディレクトリからの相対パスを取得
+        relativePath, err := filepath.Rel(currentDir, node.path)
+        if err != nil {
+            continue
+        }
+
         content, err := os.ReadFile(node.path)
         if err != nil {
             continue
         }
-        builder.WriteString("★★ The contents of " + node.name + " is below.\n")
+
+        // 相対パスを含めてコピー内容に追加
+        builder.WriteString("★★ The contents of " + relativePath + " is below.\n")
         builder.Write(content)
         builder.WriteString("\n\n")
     }
+
     clipboard.WriteAll(builder.String())
 }
-
