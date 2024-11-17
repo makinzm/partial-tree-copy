@@ -42,7 +42,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 // View renders the current state of the model as a string.
 // It displays the file tree and provides user instructions at the bottom.
 func (m model) View() string {
-    s := m.renderNode(m.root, 0)
+    content := m.renderNode(m.root, 0)
+    m.view.SetContent(content)
+
+    s := m.view.View()
     s += "\nHow to use"
     s += "\nPress 'w'/Ctrl+'c' to quit, 'Enter' to select a file or expand/collapse a dir, up('k')/down('j') to move"
     return s

@@ -3,6 +3,8 @@ package main
 import (
     "os"
     "path/filepath"
+
+    "github.com/charmbracelet/bubbles/viewport"
 )
 
 // fileNode represents a node in the file tree structure.
@@ -24,6 +26,7 @@ type model struct {
     root      *fileNode              // Root node of the file tree
     cursor    *fileNode              // Current position of the cursor in the tree
     selection map[string]*fileNode   // Map of selected nodes (key is the file path)
+    view  viewport.Model             // Viewport model for rendering the tree view
 }
 
 // buildTree populates the child nodes of the given fileNode.

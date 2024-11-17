@@ -4,6 +4,7 @@ import (
     "fmt"
     "os"
     tea "github.com/charmbracelet/bubbletea"
+    "github.com/charmbracelet/bubbles/viewport"
 )
 
 func main() {
@@ -24,6 +25,7 @@ func main() {
         root:      rootNode,
         cursor:    rootNode,
         selection: make(map[string]*fileNode),
+        view: viewport.Model{Height: 20},
     }
 
     p := tea.NewProgram(m)

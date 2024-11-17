@@ -79,9 +79,9 @@ func (m *model) moveBrotherCursorDown() {
     }
 }
 
-// moveCursorDown moves the cursor down in the tree view.
-// If the cursor is at the last child of its parent, it moves the cursor to the parent's next sibling node.
-// Otherwise, it moves the cursor to the next sibling node if available.
+// moveCursorUp moves the cursor up in the tree view.
+// If the cursor is at the top of the view, it scrolls the viewport up.
+// If the cursor is in a directory and expanded, it moves the cursor to the last child.
 func (m *model) moveCursorUp() {
     // 表示されているノード一覧を取得
     visibleNodes := m.getVisibleNodes()
@@ -98,6 +98,7 @@ func (m *model) moveCursorUp() {
     // インデックスが0より大きい場合、上に移動
     if index > 0 {
         m.cursor = visibleNodes[index-1]
+        m.view.LineUp(1)
     }
 }
 
@@ -149,6 +150,7 @@ func (m *model) moveCursorDown() {
 
         if index < len(grandParent.children)-1 {
             m.cursor = grandParent.children[index+1]
+            m.view.LineDown(1)
             return
         }
 
