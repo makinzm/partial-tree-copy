@@ -89,7 +89,7 @@ func (m *model) copySelection() {
         if err != nil {
             continue
         }
-        builder.WriteString("### " + node.name + "\n")
+        builder.WriteString("★★ The contents of " + node.name + " is below.\n")
         builder.Write(content)
         builder.WriteString("\n\n")
     }
