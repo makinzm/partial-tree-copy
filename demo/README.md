@@ -1,10 +1,14 @@
 
 （手順１）コンソール上で、コピーをしたい内容があるディレクトリに移動をします。
+
 （手順２）次に今回作成したコマンドを実行します。
+
 ```shell
 partial-tree-copy
 ```
+
 すると次のような画面になります。
+
 ```shell
 ❯ partial-tree-copy
 > 📁 /<CurrentDirectory>
@@ -13,7 +17,9 @@ How to use
 Press 'w'/Ctrl+'c' to quit, 'Enter' to select a file or expand/collapse a dir, up('k')/down('j') to move
 
 ```
+
 画面の下の`How to use`に従って`Enter`を押して、いくつかファイルを選択します。
+
 
 ```
 ❯ partial-tree-copy
@@ -40,6 +46,8 @@ Press 'w'/Ctrl+'c' to quit, 'Enter' to select a file or expand/collapse a dir, u
 その内容はクリップボードにコピーされているため、すぐ貼り付けを行うことができます。
 
 - 実際にコピーできる内容は以下の通りで ★で区切られている形をしています。
+
+<details><summary>実際にコピーできる内容</summary>
 
 ```
 ★★ The contents of src/commands.go is below.
@@ -383,4 +391,5 @@ func (m *model) renderNode(node *fileNode, level int) string {
 
 
 
-```
+```　
+</details>
