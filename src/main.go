@@ -24,9 +24,10 @@ func main() {
         root:      rootNode,
         cursor:    rootNode,
         selection: make(map[string]*fileNode),
+        startIndex: 0,
     }
 
-    p := tea.NewProgram(m)
+    p := tea.NewProgram(m, tea.WithAltScreen())
     if err := p.Start(); err != nil {
         fmt.Println("エラー:", err)
         os.Exit(1)

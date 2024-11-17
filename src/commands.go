@@ -98,6 +98,14 @@ func (m *model) moveCursorUp() {
     // インデックスが0より大きい場合、上に移動
     if index > 0 {
         m.cursor = visibleNodes[index-1]
+        
+        // カーソルが表示範囲の上限を超えたらstartIndexを減らす
+        if index-1 < m.startIndex {
+            m.startIndex--
+            if m.startIndex < 0 {
+                m.startIndex = 0
+            }
+        }
     }
 }
 
@@ -105,6 +113,8 @@ func (m *model) moveCursorUp() {
 // If the current node is a directory and expanded, it moves the cursor to its first child.
 // Otherwise, it moves to the next sibling node if available.
 func (m *model) moveCursorDown() {
+    displayLines := m.height - 4
+
     // 展開されているディレクトリの場合、最初の子ノードに移動
     if m.cursor.isDir && m.cursor.expanded && len(m.cursor.children) > 0 {
         m.cursor = m.cursor.children[0]
@@ -149,6 +159,9 @@ func (m *model) moveCursorDown() {
 
         if index < len(grandParent.children)-1 {
             m.cursor = grandParent.children[index+1]
+            if index+1 >= m.startIndex+displayLines {
+                m.startIndex++
+            }
             return
         }
 

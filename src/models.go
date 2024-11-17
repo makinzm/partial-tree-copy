@@ -24,6 +24,8 @@ type model struct {
     root      *fileNode              // Root node of the file tree
     cursor    *fileNode              // Current position of the cursor in the tree
     selection map[string]*fileNode   // Map of selected nodes (key is the file path)
+    startIndex int // 表示開始位置
+    height     int // ターミナルの高さ
 }
 
 // buildTree populates the child nodes of the given fileNode.
@@ -62,3 +64,14 @@ func (m *model) getVisibleNodes() []*fileNode {
     traverse(m.root)
     return nodes
 }
+
+func (m *model) getNodeLevel(node *fileNode) int {
+    level := 0
+    current := node.parent
+    for current != nil && current != m.root {
+        level++
+        current = current.parent
+    }
+    return level
+}
+
