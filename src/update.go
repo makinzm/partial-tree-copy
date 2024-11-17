@@ -23,13 +23,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
         case "ctrl+c", "w":
             m.copySelection()
             return m, tea.Quit
-        case "up":
+        case "up", "k":
             m.moveCursorUp()
-        case "down":
+        case "down", "j":
             m.moveCursorDown()
         case "enter":
             m.toggleExpand()
-        case "a":
             m.toggleSelect()
         }
     }
@@ -40,7 +39,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 // It displays the file tree and provides user instructions at the bottom.
 func (m model) View() string {
     s := m.renderNode(m.root, 0)
-    s += "\n'w'で終了、'a'で選択、'Enter'で展開/縮小、上下キーで移動"
+    s += "\nHow to use"
+    s += "\nPress 'w'/Ctrl+'c' to quit, 'Enter' to select a file or expand/collapse a dir, up('k')/down('j') to move"
     return s
 }
 
