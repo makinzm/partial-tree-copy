@@ -68,7 +68,7 @@ Navigation: 'h'/'l' to switch panels, 'j'/'k' to move up/down, 'J'/'K' to jump b
 ```bash
 git clone git@github.com:makinzm/partial-tree-copy.git
 cd partial-tree-copy
-go build -o partial-tree-copy ./src
+go build -o partial-tree-copy ./cmd/partial-tree-copy
 ```
 
 ### Global installation

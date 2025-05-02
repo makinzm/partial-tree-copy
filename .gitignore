@@ -1,2 +1,4 @@
 partial-tree-copy
+# include directory even if partial-tree-copy 
+!partial-tree-copy/
 
