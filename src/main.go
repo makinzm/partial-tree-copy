@@ -1,35 +1,36 @@
 package main
 
 import (
-    "fmt"
-    "os"
-    tea "github.com/charmbracelet/bubbletea"
+	"fmt"
+	"os"
+
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 func main() {
-    rootPath, err := os.Getwd()
-    if err != nil {
-        fmt.Println("ディレクトリを取得できません:", err)
-        os.Exit(1)
-    }
+	rootPath, err := os.Getwd()
+	if err != nil {
+		fmt.Println("ディレクトリを取得できません:", err)
+		os.Exit(1)
+	}
 
-    rootNode := &fileNode{
-        name:  rootPath,
-        path:  rootPath,
-        isDir: true,
-    }
-    buildTree(rootNode)
+	rootNode := &fileNode{
+		name:  rootPath,
+		path:  rootPath,
+		isDir: true,
+	}
+	buildTree(rootNode)
 
-    m := model{
-        root:      rootNode,
-        cursor:    rootNode,
-        selection: make(map[string]*fileNode),
-    }
+	m := model{
+		root:           rootNode,
+		cursor:         rootNode,
+		selection:      make(map[string]*fileNode),
+		maxVisibleRows: 20,
+	}
 
-    p := tea.NewProgram(m)
-    if err := p.Start(); err != nil {
-        fmt.Println("エラー:", err)
-        os.Exit(1)
-    }
+	p := tea.NewProgram(m)
+	if err := p.Start(); err != nil {
+		fmt.Println("エラー:", err)
+		os.Exit(1)
+	}
 }
-
