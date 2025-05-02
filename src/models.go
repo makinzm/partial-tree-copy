@@ -25,6 +25,8 @@ type model struct {
 	cursor         *fileNode            // Current position of the cursor in the tree
 	selection      map[string]*fileNode // Map of selected nodes (key is the file path)
 	maxVisibleRows int                  // Maximum number of visible rows in the tree view
+	focusRight     bool                 // Indicates if the right pane is focused
+	rightScroll    int                  // Scroll position of the right pane
 }
 
 // buildTree populates the child nodes of the given fileNode.
