@@ -54,7 +54,6 @@ Navigation: 'h'/'l' to switch panels, 'j'/'k' to move up/down, 'J'/'K' to jump b
    ```
 
 2. Controls:
-   - `Space` - Select/deselect file
    - `Enter` - Expand/collapse directory
    - `j/k` - Move up/down
    - `J/K` - Jump between directories
@@ -84,7 +83,7 @@ sudo cp partial-tree-copy /usr/local/bin/
 
 - Share relevant files during code reviews
 - Extract code snippets for technical documentation
-- Share problematic code sections with team members　or AI
+- Share problematic code sections with team members or AI
 - Collect selected files from multiple repositories
 
 
