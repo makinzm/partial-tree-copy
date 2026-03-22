@@ -27,7 +27,7 @@ func NewApplication(webMode bool, webPort int) (*Application, error) {
 	fileCopier := copier.NewFileCopier(fileRepo)
 
 	// Initialize UI presenter
-	presenter := ui.NewUIPresenter(fileNavigator, fileSelector, fileCopier, fileRepo)
+	presenter := ui.NewUIPresenter(fileNavigator, fileSelector, fileCopier)
 
 	return &Application{
 		presenter: presenter,

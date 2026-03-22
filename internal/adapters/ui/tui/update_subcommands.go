@@ -89,20 +89,3 @@ func (m *Model) GetBreadcrumbs() []*entities.FileNode {
 func (m *Model) GetNodeLevel(node *entities.FileNode) int {
 	return m.Navigator.GetNodeLevel(node)
 }
-
-// LoadPreviewContent loads the content of the currently focused file for preview
-func (m *Model) LoadPreviewContent() {
-	if m.Cursor != nil && !m.Cursor.IsDir && m.FileRepo != nil {
-		content, err := m.FileRepo.ReadFile(m.Cursor.Path)
-		if err != nil {
-			m.PreviewContent = "Error reading file: " + err.Error()
-		} else {
-			m.PreviewContent = string(content)
-		}
-		m.PreviewScroll = 0
-	} else if m.Cursor != nil && m.Cursor.IsDir {
-		m.PreviewContent = "(directory)"
-	} else {
-		m.PreviewContent = ""
-	}
-}

@@ -3,7 +3,6 @@ package tui
 import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/makinzm/partial-tree-copy/internal/domain/entities"
-	"github.com/makinzm/partial-tree-copy/internal/domain/repositories"
 	"github.com/makinzm/partial-tree-copy/internal/usecases/copier"
 	"github.com/makinzm/partial-tree-copy/internal/usecases/navigator"
 	"github.com/makinzm/partial-tree-copy/internal/usecases/selector"
@@ -17,18 +16,10 @@ type Model struct {
 	FocusRight     bool               // Indicates if the right pane is focused
 	RightScroll    int                // Scroll position of the right pane
 
-	// Preview mode
-	PreviewMode    bool   // Whether preview mode is active
-	PreviewContent string // Content of file being previewed
-	PreviewScroll  int    // Scroll position in preview
-
 	// Use cases
 	Navigator *navigator.FileNavigator
 	Selector  *selector.FileSelector
 	Copier    *copier.FileCopier
-
-	// Repository
-	FileRepo repositories.FileRepository
 }
 
 // NewModel creates a new Model with the given use cases and settings
@@ -37,7 +28,6 @@ func NewModel(
 	selector *selector.FileSelector,
 	copier *copier.FileCopier,
 	maxVisibleRows int,
-	fileRepo repositories.FileRepository,
 ) (*Model, error) {
 	// Build the root node
 	rootNode, err := navigator.BuildRootNode()
@@ -51,13 +41,9 @@ func NewModel(
 		MaxVisibleRows: maxVisibleRows,
 		FocusRight:     false,
 		RightScroll:    0,
-		PreviewMode:    false,
-		PreviewContent: "",
-		PreviewScroll:  0,
 		Navigator:      navigator,
 		Selector:       selector,
 		Copier:         copier,
-		FileRepo:       fileRepo,
 	}, nil
 }
 

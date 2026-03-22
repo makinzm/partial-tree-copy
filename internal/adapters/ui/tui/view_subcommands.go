@@ -222,65 +222,6 @@ func (m *Model) formatBreadcrumbs() string {
 	return result.String()
 }
 
-// buildPreviewView constructs the file preview view (right panel in preview mode)
-func (m *Model) buildPreviewView(maxLines int) string {
-	var s strings.Builder
-
-	// Header
-	if m.Cursor != nil {
-		s.WriteString("Preview: " + filepath.Base(m.Cursor.Path) + "\n\n")
-	} else {
-		s.WriteString("Preview:\n\n")
-	}
-
-	// If cursor is on a directory, show a message
-	if m.Cursor != nil && m.Cursor.IsDir {
-		s.WriteString("Select a file to preview\n")
-		return s.String()
-	}
-
-	if m.PreviewContent == "" {
-		s.WriteString("(empty file)\n")
-		return s.String()
-	}
-
-	// Split content into lines
-	lines := strings.Split(m.PreviewContent, "\n")
-
-	// Calculate visible range
-	visibleCount := maxLines - 2 // Subtract header and empty line
-	startIdx := m.PreviewScroll
-	if startIdx >= len(lines) {
-		startIdx = len(lines) - 1
-	}
-	if startIdx < 0 {
-		startIdx = 0
-	}
-	endIdx := startIdx + visibleCount
-	if endIdx > len(lines) {
-		endIdx = len(lines)
-	}
-
-	// Indicate if there are hidden lines above
-	if startIdx > 0 {
-		s.WriteString("...\n")
-	}
-
-	// Render lines with line numbers
-	for i := startIdx; i < endIdx; i++ {
-		lineNum := strconv.Itoa(i + 1)
-		padding := strings.Repeat(" ", 4-len(lineNum))
-		s.WriteString(padding + lineNum + " | " + lines[i] + "\n")
-	}
-
-	// Indicate if there are hidden lines below
-	if endIdx < len(lines) {
-		s.WriteString("...\n")
-	}
-
-	return s.String()
-}
-
 // getRelativePath returns the path relative to a base path
 func (m *Model) getRelativePath(path, rootPath string) string {
 	// If path starts with root path, return relative path

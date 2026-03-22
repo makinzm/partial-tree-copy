@@ -6,7 +6,6 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/makinzm/partial-tree-copy/internal/adapters/ui/tui"
-	"github.com/makinzm/partial-tree-copy/internal/domain/repositories"
 	"github.com/makinzm/partial-tree-copy/internal/usecases/copier"
 	"github.com/makinzm/partial-tree-copy/internal/usecases/navigator"
 	"github.com/makinzm/partial-tree-copy/internal/usecases/selector"
@@ -17,7 +16,6 @@ type UIPresenter struct {
 	navigator *navigator.FileNavigator
 	selector  *selector.FileSelector
 	copier    *copier.FileCopier
-	fileRepo  repositories.FileRepository
 }
 
 // NewUIPresenter creates a new UIPresenter
@@ -25,13 +23,11 @@ func NewUIPresenter(
 	navigator *navigator.FileNavigator,
 	selector *selector.FileSelector,
 	copier *copier.FileCopier,
-	fileRepo repositories.FileRepository,
 ) *UIPresenter {
 	return &UIPresenter{
 		navigator: navigator,
 		selector:  selector,
 		copier:    copier,
-		fileRepo:  fileRepo,
 	}
 }
 
@@ -43,7 +39,6 @@ func (p *UIPresenter) StartUI() error {
 		p.selector,
 		p.copier,
 		20, // Maximum visible rows
-		p.fileRepo,
 	)
 	if err != nil {
 		return fmt.Errorf("failed to create UI model: %w", err)
