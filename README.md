@@ -8,7 +8,8 @@ A CLI tool for selectively copying files from your project directory tree.
 
 ## Features
 
-- Terminal-based UI for easy navigation and file selection
+- Terminal-based UI (TUI) for easy navigation and file selection
+- **Browser-based GUI** for point-and-click file selection with content preview
 - Tree-structured file browser
 - Multi-file selection capabilities
 - Formatted clipboard output with file headers
@@ -48,17 +49,35 @@ Navigation: 'h'/'l' to switch panels, 'j'/'k' to move up/down, 'J'/'K' to jump b
 
 ## Usage
 
-1. Start the tool:
-   ```bash
-   partial-tree-copy
-   ```
+### TUI Mode (default)
 
-2. Controls:
-   - `Enter` - Expand/collapse directory
-   - `j/k` - Move up/down
-   - `J/K` - Jump between directories
-   - `h/l` - Switch between panels
-   - `w` or `Ctrl+c` - Copy selected files and exit
+```bash
+partial-tree-copy
+```
+
+Controls:
+- `Enter` - Expand/collapse directory
+- `j/k` - Move up/down
+- `J/K` - Jump between directories
+- `h/l` - Switch between panels
+- `w` or `Ctrl+c` - Copy selected files and exit
+
+### Web GUI Mode
+
+```bash
+partial-tree-copy --web
+```
+
+Opens a browser-based GUI where you can:
+- Browse the file tree by clicking directories
+- Preview file contents by clicking on files
+- Select files with checkboxes
+- Copy all selected files to clipboard with the "Copy to Clipboard" button
+
+Use `--port` to specify a custom port (default: 8080):
+```bash
+partial-tree-copy --web --port 3000
+```
 
 ## Installation
 
