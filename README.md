@@ -62,6 +62,14 @@ Navigation: 'h'/'l' to switch panels, 'j'/'k' to move up/down, 'J'/'K' to jump b
 
 ## Installation
 
+### Install with go install
+
+```bash
+go install github.com/makinzm/partial-tree-copy/cmd/partial-tree-copy@latest
+```
+
+The binary will be installed to `$GOPATH/bin` (or `$HOME/go/bin` by default). Make sure this directory is in your `PATH`.
+
 ### Build from source
 
 ```bash

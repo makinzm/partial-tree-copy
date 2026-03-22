@@ -24,7 +24,7 @@ func NewApplication() (*Application, error) {
 	fileCopier := copier.NewFileCopier(fileRepo)
 
 	// Initialize UI presenter
-	presenter := ui.NewUIPresenter(fileNavigator, fileSelector, fileCopier)
+	presenter := ui.NewUIPresenter(fileNavigator, fileSelector, fileCopier, fileRepo)
 
 	return &Application{
 		presenter: presenter,
