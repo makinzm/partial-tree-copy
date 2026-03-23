@@ -15,10 +15,18 @@ func setupTestDir(t *testing.T) string {
 	dir := t.TempDir()
 
 	// Create test file structure
-	os.MkdirAll(filepath.Join(dir, "src"), 0755)
-	os.WriteFile(filepath.Join(dir, "README.md"), []byte("# Test Project"), 0644)
-	os.WriteFile(filepath.Join(dir, "src", "main.go"), []byte("package main\n\nfunc main() {}"), 0644)
-	os.WriteFile(filepath.Join(dir, "src", "util.go"), []byte("package main\n\nfunc hello() string { return \"hi\" }"), 0644)
+	if err := os.MkdirAll(filepath.Join(dir, "src"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	for _, f := range []struct{ path, content string }{
+		{filepath.Join(dir, "README.md"), "# Test Project"},
+		{filepath.Join(dir, "src", "main.go"), "package main\n\nfunc main() {}"},
+		{filepath.Join(dir, "src", "util.go"), "package main\n\nfunc hello() string { return \"hi\" }"},
+	} {
+		if err := os.WriteFile(f.path, []byte(f.content), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
 
 	return dir
 }

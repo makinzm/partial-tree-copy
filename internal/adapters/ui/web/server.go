@@ -48,7 +48,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) handleTree(w http.ResponseWriter, r *http.Request) {
 	tree := h.buildTree(h.rootDir, "")
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(tree)
+	_ = json.NewEncoder(w).Encode(tree)
 }
 
 func (h *Handler) buildTree(fullPath, relPath string) TreeNode {
@@ -120,7 +120,7 @@ func (h *Handler) handleFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.Write(content)
+	_, _ = w.Write(content)
 }
 
 func (h *Handler) handleCopy(w http.ResponseWriter, r *http.Request) {
@@ -167,12 +167,12 @@ func (h *Handler) handleCopy(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+	_ = json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 }
 
 func (h *Handler) handleIndex(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprint(w, indexHTML)
+	_, _ = fmt.Fprint(w, indexHTML)
 }
 
 // StartServer starts the web UI server and opens the browser
@@ -209,7 +209,7 @@ func openBrowser(url string) {
 		cmd = exec.Command("rundll32", "url.dll,FileProtocolHandler", url)
 	}
 	if cmd != nil {
-		cmd.Start()
+		_ = cmd.Start()
 	}
 }
 
