@@ -19,14 +19,6 @@ import (
 
 // --- mock repository ---
 
-type mockDirEntry struct {
-	name  string
-	isDir bool
-}
-
-func (m mockDirEntry) Name() string { return m.name }
-func (m mockDirEntry) IsDir() bool  { return m.isDir }
-
 type mockFileRepo struct {
 	currentDir    string
 	files         map[string][]byte
