@@ -22,3 +22,48 @@
 - Branch `fix/close-stale-vuln-prs`, edited `vulnerability-scan.yml`,
   verified with `actionlint` locally (clean).
 - Opened PR #40. CI (test / lint / actionlint) all green.
+
+## Lint / formatter check (pre-DA/pre-completion)
+
+Changed files were `.github/workflows/vulnerability-scan.yml` (YAML) and two
+new Markdown files under `tasks/`. No Go source changed, so
+`golangci-lint`/`cargo`/etc. (this repo's `lefthook.yml` only configures
+`golangci-lint run ./...`) do not apply. The applicable linter is
+`actionlint` for the workflow YAML:
+
+```
+$ ./actionlint /Users/hope/workspace/partial-tree-copy/.github/workflows/vulnerability-scan.yml
+(no output — clean)
+```
+
+Also confirmed clean by the `actionlint` job in CI on PR #40 (green).
+
+## Session improvement report
+
+### 改善 #1: actionlint をローカル実行するための allow リスト追加
+
+- **指摘 / 動機**: このセッションで `.github/workflows/vulnerability-scan.yml` の修正を検証するため `actionlint` バイナリを実行したところ、毎回承認が必要だった。既に allow 済みの `shellcheck` と同じ「読み取り専用の静的解析ツール」というクラスなのに未対応だった。
+- **改善の種類**: Allow
+- **改善先（場所）**: `~/.local/share/chezmoi/dot_claude/settings.json`（`permissions.allow`）
+- **その場所を選んだ理由**: Hook で防ぐべき危険な操作ではなく（副作用なし・読み取り専用）、都度承認が発生していたのは単に allow パターン未登録だったため。優先順位どおり Hook より下の Allow で解決するのが適切。
+- **実装内容**: `"Bash(shellcheck *)"` の直後に `"Bash(actionlint *)"` を追加。
+- **永続化**: commit `8f09460`（dot_claude、push済）/ `dc3eea4`（親 chezmoi、push済）、`chezmoi apply --force ~/.claude/settings.json` 実施済み・反映確認済み。
+
+### 改善 #2: curl | bash によるリモートスクリプト実行は allow 化せず、go install に置き換える方針を記憶
+
+- **指摘 / 動機**: `actionlint` インストールのため公式の `curl -o dl.sh ... && bash dl.sh` パターンを使い、ダウンロードと実行でそれぞれ承認が必要だった。任意のリモートスクリプトを無条件実行することになるため allow リスト化は安全上見送るべきと判断。
+- **改善の種類**: Rule（ただし CLAUDE.md への追記ではなくプロジェクトメモリに記録 — 既存の `Bash(go *)` allow で代替コマンドが既にゼロ承認になるため、設定変更は不要）
+- **改善先（場所）**: `/Users/hope/.claude/projects/-Users-hope-workspace-partial-tree-copy/memory/tooling_prefer_go_install.md`
+- **その場所を選んだ理由**: Hook/Allow では「安全に」自動化できない（任意コード実行のため）。次回以降、同種のツールで `go install <module>/cmd/<tool>@latest` を優先的に選べば `Bash(go *)` が既にカバーしており、新たな設定追加なしで承認ゼロを達成できる。ナロースコープな tips なので全プロジェクト共通の CLAUDE.md ではなくプロジェクトメモリに留めた。
+- **実装内容**: memory ファイルを新規作成し `MEMORY.md` にインデックス行を追加。
+- **永続化**: メモリファイルとして保存済み（chezmoi 管理外、`/Users/hope/.claude/projects/.../memory/` は auto memory システムの対象）。
+
+### 改善 #3: `for` ループによる12件の `gh pr close` は allow 化しない（現状維持）
+
+- **指摘 / 動機**: 12個の stale PR を一括クローズするために `for n in 27..38; do gh pr close ...; done` を実行し、承認が必要だった。`Bash(gh *)` は既に allow 済みだが、コマンド全体が `for` で始まるため prefix マッチせず承認が発生した。
+- **改善の種類**: 別途調査（結論: 変更なし）
+- **改善先（場所）**: 該当なし（`~/.local/share/chezmoi/dot_claude/settings.json` は変更しない）
+- **その場所を選んだ理由**: GitHub 上の PR を複数同時にクローズするのは可視性が高く元に戻しにくい操作（reopen は可能だが履歴・通知が残る）。ループ構文を allow 化すると任意のループ内コマンドを無審査で実行できてしまい、安全側に倒すべき。今回のような一括クローズは頻度が低く、都度承認のコストより安全性を優先する。
+- **実装内容**: なし。
+- **永続化**: 該当なし（設定変更なし）。
+
