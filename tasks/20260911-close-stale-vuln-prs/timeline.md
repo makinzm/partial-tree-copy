@@ -18,3 +18,7 @@
 - Plan: (1) close PRs #27–#38 via `gh pr close` with an explanatory comment,
   (2) add a step to the workflow that closes any previous open PR with the
   `vulnerability` label + matching title before creating the new one.
+- Closed #27–#38 via `gh pr close`, each with an explanatory comment.
+- Branch `fix/close-stale-vuln-prs`, edited `vulnerability-scan.yml`,
+  verified with `actionlint` locally (clean).
+- Opened PR #40. CI (test / lint / actionlint) all green.
